@@ -1,0 +1,141 @@
+绝对值 ：{{ number|abs }}
+首字母大写：{{ 'my first car'|capitalize }}
+变为小写：{{ 'WELCOME'|lower }}
+        {# outputs 'welcome' #}
+变为大写
+    {{ 'welcome'|upper }}   
+    {# outputs 'WELCOME' #}        
+字符集转换：{{ data|convert_encoding('UTF-8', 'iso-2022-jp') }}
+日期格式：{{ post.published_at|date("m/d/Y") }}
+        加时区：{{ post.published_at|date("m/d/Y", "Europe/Paris") }}
+日期定义{{ post.published_at|date_modify("+1 day")|date("m/d/Y") }}
+默认值：{{ var.method(foo|default('foo'))|default('foo') }}
+格式：{{ "I like %s and %s."|format(foo, "bar") }}
+拼接：
+    {{ [1, 2, 3]|join }}
+    {# returns 123 #}
+    {{ [1, 2, 3]|join('|') }}
+    {# outputs 1|2|3 #}
+变为json字符串
+    {{ data|json_encode() }}    
+返回一个数组的key：
+    {% for key in array|keys %}
+        ...
+    {% endfor %}    
+输出第一个元素：
+            {{ [1, 2, 3, 4]|first }}
+            {# outputs 1 #}
+
+            {{ { a: 1, b: 2, c: 3, d: 4 }|first }}
+            {# outputs 1 #}
+
+            {{ '1234'|first }}
+            {# outputs 1 #}
+输出最后一个元素
+    {{ [1, 2, 3, 4]|last }}
+    {# outputs 4 #}
+
+    {{ { a: 1, b: 2, c: 3, d: 4 }|last }}
+    {# outputs 4 #}
+
+    {{ '1234'|last }}
+    {# outputs 4 #}     
+返回长度：
+    {% if users|length > 10 %}
+        ...
+    {% endif %}      
+
+一组：    {% set items = ['a', 'b', 'c', 'd', 'e', 'f', 'g'] %}
+    <table>
+    {% for row in items|batch(3, 'No item') %}
+        <tr>
+            {% for column in row %}
+                <td>{{ column }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+    效果：
+        <table>
+        <tr>
+            <td>a</td>
+            <td>b</td>
+            <td>c</td>
+        </tr>
+        <tr>
+            <td>d</td>
+            <td>e</td>
+            <td>f</td>
+        </tr>
+        <tr>
+            <td>g</td>
+            <td>No item</td>
+            <td>No item</td>
+        </tr>
+    </table>
+合并两个数组：
+    {% set values = [1, 2] %}
+    {% set values = values|merge(['apple', 'orange']) %}
+    {# values now contains [1, 2, 'apple', 'orange'] #}    
+    key相同，后者覆盖前者
+    {% set items = { 'apple': 'fruit', 'orange': 'fruit' } %}
+
+    {% set items = { 'apple': 'unknown' }|merge(items) %}
+
+    {# items now contains { 'apple': 'fruit', 'orange': 'fruit' } #}
+换行
+    {{ "I like Twig.\nYou will like it too."|nl2br }}
+    {# outputs
+
+        I like Twig.<br />
+        You will like it too.
+
+    #}   
+替换
+    {{ "I like %this% and %that%."|replace({'%this%': foo, '%that%': "bar"}) }}
+
+    {# outputs I like foo and bar  if the foo parameter equals to the foo string. #}  
+逆序
+    {{ '1234'|reverse }}
+    {# outputs 4321 #} 
+四舍五入
+    {{ 42.55|round }}
+    {# outputs 43 #}
+
+    {{ 42.55|round(1, 'floor') }}
+    {# outputs 42.5 #}    
+切片：从x开始向后取几个
+    {% for i in [1, 2, 3, 4, 5]|slice(1, 2) %}
+    {# will iterate over 2 and 3 #}
+    {% endfor %}
+
+    {{ '12345'|slice(1, 2) }}
+
+    {# outputs 23 #}   
+排序：字典顺序排序
+    {% for user in users|sort %}
+        ...
+    {% endfor %}    
+分割：分割字符串为一个list
+    {% set foo = "one,two,three"|split(',') %}
+    {# foo contains ['one', 'two', 'three'] #}  
+每个单词首字母大写
+    {{ 'my first car'|title }}
+    {# outputs 'My First Car' #}  
+去除空格
+    {{ '  I like Twig.  '|trim }}
+
+    {# outputs 'I like Twig.' #}
+
+    {{ '  I like Twig.'|trim('.') }}
+
+    {# outputs '  I like Twig' #}   
+url转换
+    {{ "path-seg*ment"|url_encode }}
+    {# outputs "path-seg%2Ament" #}
+
+    {{ "string with spaces"|url_encode }}
+    {# outputs "string%20with%20spaces" #}
+
+    {{ {'param': 'value', 'foo': 'bar'}|url_encode }}
+    {# outputs "param=value&foo=bar" #}                
